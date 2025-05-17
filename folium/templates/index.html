@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта корпусов ИГУ</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='dark-theme.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    {{ folium_css|safe }}
+</head>
+<body>
+    <div id="map-container">
+        <div class="sidebar">
+            <h3>Карта корпусов ИГУ</h3>
+
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Поиск корпуса...">
+                <button id="search-button" class="btn">Найти</button>
+            </div>
+
+            <div class="filter-container">
+                <div class="filter-title">Фильтр по категориям:</div>
+                {% for category, color in category_colors.items() %}
+                <div>
+                    <input type="checkbox" id="filter-{{ category }}" class="category-filter" value="{{ category }}" checked>
+                    <label for="filter-{{ category }}">
+                        <span class="legend-color" style="background-color: {{ color }};"></span>
+                        {{ category|capitalize }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="theme-toggle">
+                <label for="theme-toggle" class="toggle-label">Тёмная тема</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="legend">
+                <div class="filter-title">Легенда:</div>
+                {% for category, color in category_colors.items() %}
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: {{ color }};"></div>
+                    <div>{{ category|capitalize }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="toggle-sidebar" class="toggle-sidebar">&lt;</div>
+
+        <div class="info-panel" id="info-panel">
+            <span class="info-close">×</span>
+            <h4 id="info-title"></h4>
+            <div id="info-content"></div>
+        </div>
+
+        <div id="map">
+            {{ folium_map|safe }}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='main.js') }}"></script>
+    {{ folium_js|safe }}
+</body>
+</html>
